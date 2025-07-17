@@ -16,11 +16,17 @@ from .converter import batch_convert
     help="Output directory for converted files",
     type=click.Path(),
 )
-def main(inputs, output):
+@click.option(
+    "--output-format",
+    default="txt",
+    type=click.Choice(["txt", "markdown", "json"]),
+    help="Output format (txt, markdown, json)",
+)
+def main(inputs, output, output_format):
     """
-    Convert PowerPoint, Word, Excel, and PDF files to plain text.
+    Convert PowerPoint, Word, Excel, and PDF files to specified format.
 
     INPUTS: Paths to files or directories to convert. Can be multiple.
     """
-    batch_convert(list(inputs), output)
+    batch_convert(list(inputs), output, output_format)
     click.echo(f"Conversion complete. Output saved to: {output}")

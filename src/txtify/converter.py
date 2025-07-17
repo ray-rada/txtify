@@ -2,6 +2,7 @@
 This module provides functionality to convert PowerPoint, Word, and PDF files to plain text.
 """
 
+import json
 import os
 from io import StringIO
 from typing import List, Union
@@ -123,16 +124,28 @@ def get_valid_files(path: str) -> List[str]:
     return valid_files
 
 
-def batch_convert(input_paths: Union[str, List[str]], output_dir: str) -> None:
+def format_as_markdown(text: str) -> str:
+    """Convert plain text to basic Markdown format."""
+    return f"# Converted Document\n\n{text.replace('\n', '\n\n')}"
+
+
+def format_as_json(text: str) -> str:
+    """Convert plain text to JSON format."""
+    return json.dumps({"content": text}, indent=2, ensure_ascii=False)
+
+
+def batch_convert(
+    input_paths: Union[str, List[str]],
+    output_dir: str,
+    output_format: str = "txt",
+) -> None:
     """
-    Convert multiple files or directories to plain text and save them in the output directory.
+    Convert multiple files or directories to specified format and save them in the output directory.
 
     Args:
-        input_paths (Union[str, List[str]]): Path(s) to file(s) or directory(ies) to convert.
-        output_dir (str): Directory to save the converted text files.
-
-    Raises:
-        OSError: If there's an error creating the output directory.
+        input_paths: Path(s) to file(s) or directory(ies) to convert.
+        output_dir: Directory to save the converted files.
+        output_format: Output format (txt, markdown, json).
     """
     os.makedirs(output_dir, exist_ok=True)
 
@@ -145,9 +158,18 @@ def batch_convert(input_paths: Union[str, List[str]], output_dir: str) -> None:
         for file_path in valid_files:
             try:
                 text = convert_to_text(file_path)
+                if output_format == "markdown":
+                    text = format_as_markdown(text)
+                    ext = ".md"
+                elif output_format == "json":
+                    text = format_as_json(text)
+                    ext = ".json"
+                else:
+                    ext = ".txt"
+
                 rel_path = os.path.relpath(file_path, start=input_path)
                 output_file = os.path.join(
-                    output_dir, f"{os.path.splitext(rel_path)[0]}.txt"
+                    output_dir, f"{os.path.splitext(rel_path)[0]}{ext}"
                 )
 
                 os.makedirs(os.path.dirname(output_file), exist_ok=True)

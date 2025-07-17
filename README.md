@@ -5,9 +5,6 @@
   <a href="https://pypi.org/project/txtify/">
     <img src="https://img.shields.io/pypi/v/txtify.svg" alt="PyPI Version">
   </a>
-  <a href="https://pypi.org/project/txtify/">
-    <img src="https://img.shields.io/pypi/pyversions/txtify.svg" alt="PyPI - Python Version">
-  </a>
     <a href="https://github.com/ray-rada/txtify/blob/main/LICENSE.txt">
     <img src="https://img.shields.io/pypi/l/txtify.svg" alt="PyPI - License">
   </a>
@@ -25,9 +22,10 @@ It's ideal for extracting content for analysis, archiving, or providing crucial 
 - [🚀 Installation](#-installation)
 - [💡 Usage (Command Line Interface)](#-usage-command-line-interface)
   - [Convert a Single File](#convert-a-single-file)
-  - [Convert Multiple Files](#convert-multiple-files)
   - [Convert an Entire Directory](#convert-an-entire-directory)
+  - [Convert Multiple Files and Directories](#convert-multiple-files-and-directories)
   - [Specify an Output Directory](#specify-an-output-directory)
+  - [Specify an Output Format](#specify-an-output-format)
 - [📂 Supported File Formats](#-supported-file-formats)
 - [🗄️ Output](#-output)
 - [📜 License](#-license)
@@ -37,6 +35,7 @@ It's ideal for extracting content for analysis, archiving, or providing crucial 
 ## ✨ Features
 
 ✅ **Multi-Format Support**: Converts `.pptx` (PowerPoint), `.docx` (Word), `.pdf` (Portable Document Format), and `.xlsx` (Excel) files.  
+✅ **Multiple Output Formats**: Export content as plain text (`.txt`), Markdown (`.md`), or JSON (`.json`).  
 ✅ **Batch Processing**: Convert multiple files or entire directories at once.  
 ✅ **Clean Text Output**: Extracts core textual content, making documents easily searchable and readable for both humans and AI.  
 ✅ **Intuitive CLI**: Simple command-line interface for quick and easy conversions.  
@@ -93,18 +92,6 @@ This will create a plain text file named `my_project_spec.txt` inside a new `out
 
 ---
 
-### Convert Multiple Files
-
-Specify several files at once:
-
-```bash
-txtify requirements.pdf architecture.pptx data_schema.xlsx
-```
-
-This will convert the specified files to `.txt` versions in the `output/` directory.
-
----
-
 ### Convert an Entire Directory
 
 Provide the path to a directory, and **txtify** will scan it (and its subdirectories) for all supported document types:
@@ -128,6 +115,18 @@ output/project_documentation/meetings/q1_notes.txt
 
 ---
 
+### Convert Multiple Files and Directories
+
+You can process any combination of files and directories in a single command. `txtify` will scan all specified paths and convert every supported document it finds.
+
+```bash
+txtify my_spec.docx docs_folder/ old_project/ requirements.pdf
+```
+
+This will convert the specified files to `.txt` versions in the `output/` directory.
+
+---
+
 ### Specify an Output Directory
 
 Use the `-o` or `--output` option to choose a different location for your converted files:
@@ -137,6 +136,14 @@ txtify legacy_reports/ -o contextual_data/
 ```
 
 This saves all converted text files into the `contextual_data/` directory.
+
+### Specify an Output Format
+
+By default, all documents are converted to plain text (`.txt`). If you do not specify an output format, you do not need to use this flag. To convert to Markdown or JSON, use the `--output-format` option.
+
+```bash
+txtify my_document.pdf --output-format markdown
+```
 
 ---
 
@@ -154,7 +161,7 @@ This saves all converted text files into the `contextual_data/` directory.
 
 ## 🗄️ Output
 
-Converted files will always have a `.txt` extension.
+Converted files will have a `.txt`, `.md`, or `.json` extension, depending on the chosen format.
 By default, they are saved to a directory named `output/` in your current working directory.
 You can customize this using the `-o` or `--output` option.
 
